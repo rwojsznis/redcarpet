@@ -128,7 +128,7 @@ this is just a simple test
 With hard wraps
 and other *things*.
 EOE
-    
+
     assert rd =~ /<br>/
   end
 
@@ -223,7 +223,17 @@ class MarkdownTest < Test::Unit::TestCase
 
   def test_that_autolink_flag_works
     rd = render_with({:autolink => true}, "http://github.com/rtomayko/rdiscount")
-    html_equal "<p><a href=\"http://github.com/rtomayko/rdiscount\">http://github.com/rtomayko/rdiscount</a></p>\n", rd
+    html_equal "<p><a href=\"http://github.com/rtomayko/rdiscount\">github.com/rtomayko/rdiscount</a></p>\n", rd
+  end
+
+  def test_that_autolink_flag_works_for_https
+    rd = render_with({:autolink => true}, "https://google.pl/oauth2")
+    html_equal "<p><a href=\"https://google.pl/oauth2\">google.pl/oauth2</a></p>\n", rd
+  end
+
+  def test_that_autolink_flag_works_for_ftp
+    rd = render_with({:autolink => true}, "ftp://get.the/file.zip")
+    html_equal "<p><a href=\"ftp://get.the/file.zip\">get.the/file.zip</a></p>\n", rd
   end
 
   if "".respond_to?(:encoding)
@@ -238,7 +248,7 @@ class MarkdownTest < Test::Unit::TestCase
       output = @markdown.render(input)
       assert_equal input.encoding.name, output.encoding.name
     end
-    
+
     def test_should_accept_non_utf8_or_ascii
       input = "testing \xAB\xCD".force_encoding('ASCII-8BIT')
       output = @markdown.render(input)
@@ -259,7 +269,7 @@ class MarkdownTest < Test::Unit::TestCase
 
   def test_whitespace_after_urls
     rd = render_with({:autolink => true}, "Japan: http://www.abc.net.au/news/events/japan-quake-2011/beforeafter.htm (yes, japan)")
-    exp = %{<p>Japan: <a href="http://www.abc.net.au/news/events/japan-quake-2011/beforeafter.htm">http://www.abc.net.au/news/events/japan-quake-2011/beforeafter.htm</a> (yes, japan)</p>\n}
+    exp = %{<p>Japan: <a href="http://www.abc.net.au/news/events/japan-quake-2011/beforeafter.htm">www.abc.net.au/news/events/japan-quake-2011/beforeafter.htm</a> (yes, japan)</p>}
     html_equal exp, rd
   end
 
@@ -267,13 +277,13 @@ class MarkdownTest < Test::Unit::TestCase
     @markdown.render(<<-leaks)
 2. Identify the wild-type cluster and determine all clusters
    containing or contained by it:
-   
+
        wildtype <- wildtype.cluster(h)
        wildtype.mask <- logical(nclust)
        wildtype.mask[c(contains(h, wildtype),
                        wildtype,
                        contained.by(h, wildtype))] <- TRUE
-  
+
    This could be more elegant.
     leaks
   end
@@ -357,7 +367,7 @@ fenced
     markdown = render_with({:autolink => true}, <<text)
 This a stupid link: https://github.com/rtomayko/tilt/issues?milestone=1&state=open
 text
-    html_equal "<p>This a stupid link: <a href=\"https://github.com/rtomayko/tilt/issues?milestone=1&state=open\">https://github.com/rtomayko/tilt/issues?milestone=1&amp;state=open</a></p>\n", markdown
+    html_equal "<p>This a stupid link: <a href=\"https://github.com/rtomayko/tilt/issues?milestone=1&state=open\">github.com/rtomayko/tilt/issues?milestone=1&amp;state=open</a></p>\n", markdown
   end
 
   def test_spaced_headers
@@ -404,7 +414,7 @@ class RedcarpetCompatTest < Test::Unit::TestCase
     html = RedcarpetCompat.new("This is_just_a test").to_html
     html_equal "<p>This is<em>just</em>a test</p>\n", html
   end
-  
+
   def test_compat_api_enables_extensions
     html = RedcarpetCompat.new("This is_just_a test", :no_intra_emphasis).to_html
     html_equal "<p>This is_just_a test</p>\n", html
@@ -415,7 +425,7 @@ class RedcarpetCompatTest < Test::Unit::TestCase
     html = RedcarpetCompat.new(text, :fenced_code).to_html
     html_equal "<pre><code class=\"ruby\">x = 'foo'\n</code></pre>\n", html
   end
-  
+
   def test_compat_api_ignores_gh_blockcode_extension
     text = "```ruby\nx = 'foo'\n```"
     html = RedcarpetCompat.new(text, :fenced_code, :gh_blockcode).to_html
@@ -426,7 +436,7 @@ class RedcarpetCompatTest < Test::Unit::TestCase
     html = RedcarpetCompat.new("This is_just_a test", :no_intraemphasis).to_html
     html_equal "<p>This is_just_a test</p>\n", html
   end
-  
+
   def test_translate_outdated_extensions
     # these extensions are no longer used
     exts = [:gh_blockcode, :no_tables, :smart, :strict]

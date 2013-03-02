@@ -104,9 +104,13 @@ rndr_autolink(struct buf *ob, const struct buf *link, enum mkd_autolink type, vo
 	 * an actual URI, e.g. `mailto:foo@bar.com`, we don't
 	 * want to print the `mailto:` prefix
 	 */
-	if (bufprefix(link, "mailto:") == 0) {
+	if (bufprefix(link, "mailto:") == 0 || bufprefix(link, "http://") == 0) {
 		escape_html(ob, link->data + 7, link->size - 7);
-	} else {
+	} else if (bufprefix(link, "https://") == 0) {
+		escape_html(ob, link->data + 8, link->size - 8);
+	} else if (bufprefix(link, "ftp://") == 0) {
+		escape_html(ob, link->data + 6, link->size - 6);
+  } else {
 		escape_html(ob, link->data, link->size);
 	}
 
