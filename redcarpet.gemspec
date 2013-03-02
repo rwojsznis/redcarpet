@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.description = 'A fast, safe and extensible Markdown to (X)HTML parser'
   s.date = '2012-10-19'
   s.email = 'vicent@github.com'
-  s.homepage = 'http://github.com/vmg/redcarpet'
+  s.homepage = 'http://github.com/emq/redcarpet'
   s.authors = ["Natacha Porté", "Vicent Martí"]
   # = MANIFEST =
   s.files = %w[
