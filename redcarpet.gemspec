@@ -39,7 +39,6 @@ Gem::Specification.new do |s|
     lib/redcarpet/render_man.rb
     lib/redcarpet/render_strip.rb
     redcarpet.gemspec
-    sundown
     test/redcarpet_test.rb
   ]
   # = MANIFEST =
