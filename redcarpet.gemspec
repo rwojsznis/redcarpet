@@ -38,6 +38,8 @@ Gem::Specification.new do |s|
     lib/redcarpet/compat.rb
     lib/redcarpet/render_man.rb
     lib/redcarpet/render_strip.rb
+    lib/redcarpet/simple_markdown.rb
+    lib/redcarpet/custom_markdown.rb
     redcarpet.gemspec
     test/redcarpet_test.rb
   ]
@@ -47,6 +49,7 @@ Gem::Specification.new do |s|
   s.extensions = ["ext/redcarpet/extconf.rb"]
   s.executables = ["redcarpet"]
   s.require_paths = ["lib"]
+  s.add_dependency "i18n"
   s.add_development_dependency "nokogiri"
   s.add_development_dependency "rake-compiler"
   s.add_development_dependency "test-unit"

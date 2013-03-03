@@ -9,6 +9,8 @@ gem "test-unit", ">=2" # necessary when not using bundle exec
 require 'test/unit'
 require 'redcarpet'
 require 'redcarpet/render_man'
+require 'redcarpet/custom_markdown'
+require 'redcarpet/simple_markdown'
 require 'nokogiri'
 
 def html_equal(html_a, html_b)
@@ -55,6 +57,49 @@ class SmartyPantsTest < Test::Unit::TestCase
     rd = @pants.render("<p>single `backticks` in HTML should be preserved</p>")
     assert_equal "<p>single `backticks` in HTML should be preserved</p>", rd
   end
+end
+
+class SimpleMarkdownRenderTest < Test::Unit::TestCase
+
+  def setup
+    I18n.backend.store_translations(:'pl', :countries => { :pl => "Polska" })
+    I18n.locale = :pl
+  end
+
+  def simple_markdown(text)
+    Redcarpet::Markdown.new(Redcarpet::Render::SimpleMarkdown, autolink: true, strikethrough: true).render(text)
+  end
+
+  def test_rendering_code_blocks
+    markdown = simple_markdown("This is some `awesome code`")
+    html_equal "<p>This is some <code>awesome code</code></p>\n", markdown
+  end
+
+  def test_rendering_flag_tags
+    markdown = simple_markdown("This is :pl: SPARTA!")
+    html_equal "<p>This is <img src='/img/flags/pl.gif' title='Polska' /> SPARTA!</p>", markdown
+  end
+
+  def test_ignoring_unknown_flags
+    markdown = simple_markdown("This is :qe: TEST!")
+    html_equal "<p>This is :qe: TEST!</p>", markdown
+  end
+
+  def test_rendering_flip_tag
+    markdown = simple_markdown( "This is\n~~~ Flip title\nAnd Flip Content~~~\nno go")
+    assert_match /<a class='flip' data-id='.{7,8}' href='#'>Flip title<\/a><div class='flip' id='.{7,8}'>And Flip Content<\/div>/, markdown
+  end
+
+  def test_genering_proper_autolinks
+    markdown = simple_markdown("Take a look at www.example.com")
+    html_equal "<p>Take a look at <a href=\"http://www.example.com\" rel=\"nofollow\" target=\"_blank\">www.example.com</a></p>", markdown
+  end
+
+  def test_genereting_proper_links
+    markdown = simple_markdown("[link](http://example.net)")
+    html_equal "<p><a href=\"http://example.net\" rel=\"nofollow\" target=\"_blank\">link</a></p>\n", markdown
+  end
+
 end
 
 class HTMLRenderTest < Test::Unit::TestCase
