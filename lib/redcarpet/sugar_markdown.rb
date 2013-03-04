@@ -1,5 +1,4 @@
 # encoding: utf-8
-require 'i18n'
 
 module Redcarpet
   module Render

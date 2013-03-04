@@ -1,5 +1,3 @@
-require 'i18n'
-
 module Redcarpet
   module Render
     class CustomMarkdown < XHTML

@@ -15,9 +15,6 @@ require 'test/unit'
 require 'mocha'
 require 'redcarpet'
 require 'redcarpet/render_man'
-require 'redcarpet/custom_markdown'
-require 'redcarpet/simple_markdown'
-require 'redcarpet/sugar_markdown'
 require 'nokogiri'
 
 I18n.backend.store_translations(:pl, :countries => { :pl => "Polska", :se => "Szwecja" },
