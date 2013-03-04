@@ -1,7 +1,7 @@
 [![Code Climate](https://codeclimate.com/github/emq/redcarpet.png)](https://codeclimate.com/github/emq/redcarpet) [![Build Status](https://travis-ci.org/emq/redcarpet.png?branch=master)](https://travis-ci.org/emq/redcarpet)
 
 
-__NOTE__: This fork will contain two custom markdown render classes that will include emoji support, automatic youtube frame generation and some other custom tags that you may, or may not find useful (logic extracted [quake.net.pl](http://quake.net.pl) into the public)
+__NOTE__: This fork will contain two custom markdown render classes that will include emoji support, automatic youtube frame generation and some other custom tags that you may, or may not find useful (logic extracted from [quake.net.pl](http://quake.net.pl) into the public)
 
 Redcarpet 2 is written with sugar, spice and everything nice
 ============================================================

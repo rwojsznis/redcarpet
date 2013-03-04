@@ -40,6 +40,7 @@ Gem::Specification.new do |s|
     lib/redcarpet/render_strip.rb
     lib/redcarpet/simple_markdown.rb
     lib/redcarpet/custom_markdown.rb
+    lib/redcarpet/sugar_markdown.rb
     redcarpet.gemspec
     test/redcarpet_test.rb
   ]
@@ -53,4 +54,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "nokogiri"
   s.add_development_dependency "rake-compiler"
   s.add_development_dependency "test-unit"
+  s.add_development_dependency "mocha"
 end
