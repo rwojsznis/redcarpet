@@ -1,8 +1,10 @@
 require 'redcarpet.so'
 require 'redcarpet/xhtml'
+require 'redcarpet/custom_base'
 require 'redcarpet/custom_markdown'
 require 'redcarpet/simple_markdown'
 require 'redcarpet/sugar_markdown'
+require 'redcarpet/chat_markdown'
 require 'i18n'
 
 module Redcarpet

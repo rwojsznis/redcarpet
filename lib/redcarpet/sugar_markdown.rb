@@ -1,5 +1,4 @@
 # encoding: utf-8
-
 module Redcarpet
   module Render
     class SugarMarkdown < CustomMarkdown

@@ -1,4 +1,3 @@
-
 module Redcarpet
   module Render
     # Markdown-stripping renderer. Turns Markdown into plaintext

@@ -67,6 +67,50 @@ class SmartyPantsTest < Test::Unit::TestCase
   end
 end
 
+class ChatMarkdownRenderTest < Test::Unit::TestCase
+
+  def chat_markdown(text)
+    Redcarpet::Markdown.new(Redcarpet::Render::ChatMarkdown).render(text)
+  end
+
+  def test_emoji_tags
+    markdown = chat_markdown("Howdy! How :cool: are you today?")
+    html_equal "<p>Howdy! How <img src='/img/emoji/cool.png' class='emoji' /> are you today?</p>", markdown
+  end
+
+  def test_flip_tag
+    markdown = chat_markdown("~~~ Flip title\nAnd a _content_ inside\n~~~")
+    html_equal "<p>~~~ Flip title<br>\nAnd a <em>content</em> inside<br>\n~~~</p>", markdown
+  end
+
+
+  def test_block_code
+    markdown = chat_markdown("    Test it!")
+    html_equal "<p>Test it!\n</p>", markdown
+  end
+
+  def test_quote
+    markdown = chat_markdown("> Test it!")
+    html_equal "<p>Test it!</p>", markdown
+  end
+
+  def test_header
+    markdown = chat_markdown("### Test it!")
+    html_equal "<p>Test it!</p>", markdown
+  end
+
+  def test_list
+    markdown = chat_markdown("* Test it!\n* Test it good!")
+    html_equal "<p>Test it!\nTest it good!\n</p>", markdown
+  end
+
+  def test_bold
+    markdown = chat_markdown("**Test it!**")
+    html_equal "<p><strong>Test it!</strong></p>", markdown
+  end
+
+end
+
 class SugarMarkdownRenderTest < Test::Unit::TestCase
 
   def sugar_markdown(text)
