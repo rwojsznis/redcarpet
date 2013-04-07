@@ -1,5 +1,6 @@
 require 'redcarpet.so'
 require 'redcarpet/xhtml'
+require 'redcarpet/custom_content'
 require 'redcarpet/custom_base'
 require 'redcarpet/custom_markdown'
 require 'redcarpet/simple_markdown'
