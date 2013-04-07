@@ -2,18 +2,7 @@
 module Redcarpet
   module Render
     class ChatMarkdown < CustomBase
-
-      def initialize(options={})
-        super options.merge(hard_wrap: true,
-                            safe_links_only: true,
-                            link_attributes: {
-                              rel: :nofollow, target: '_blank'
-                            })
-      end
-
-      def hrule()
-        nil
-      end
+      include SimpleBase
 
       def header(text, header_level)
         "<p>#{text}</p>"
