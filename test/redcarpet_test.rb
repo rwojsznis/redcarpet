@@ -346,6 +346,14 @@ EOE
     md = Redcarpet::Markdown.new(rndr)
     assert md.render('This is a [simple](http://test.com) test.').include?('rel="blank"')
   end
+
+  def test_that_link_works_with_quotes
+    rd = render_with(Redcarpet::Render::HTML.new, %([This'link"is](http://example.net/)))
+    assert_equal "<p><a href=\"http://example.net/\">This&#39;link&quot;is</a></p>\n", rd
+
+    rd = render_with(@rndr[:escape_html], %([This'link"is](http://example.net/)))
+    assert_equal "<p><a href=\"http://example.net/\">This&#39;link&quot;is</a></p>\n", rd
+  end
 end
 
 class MarkdownTest < Test::Unit::TestCase
@@ -535,6 +543,16 @@ EOS
     assert render_with({}, text) !~ /<del/
 
     assert render_with({:strikethrough => true}, text) =~ /<del/
+  end
+
+  def test_underline_flag_works
+    text = "this is *some* text that is _underlined_. ___boom___"
+
+    refute render_with({}, text).include? '<u>underlined</u>'
+
+    output = render_with({:underline => true}, text)
+    assert output.include? '<u>underlined</u>'
+    assert output.include? '<em>some</em>'
   end
 
   def test_that_fenced_flag_works

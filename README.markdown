@@ -93,6 +93,9 @@ would not be a valid header.
 
 * `:superscript`: parse superscripts after the `^` character; contiguous superscripts are nested together, and complex values can be enclosed in parenthesis, e.g. `this is the 2^(nd) time`
 
+* `:underline`: parse underscored emphasis as underlines.
+`This is _underlined_ but this is still *italic*`.
+
 Example:
 
 ~~~~~ ruby
@@ -177,13 +180,13 @@ built-in renderers, `HTML` and `XHTML` may be extended as such:
 
 ~~~~~ ruby
 # create a custom renderer that allows highlighting of code blocks
-class HTMLwithAlbino < Redcarpet::Render::HTML
+class HTMLwithPygments < Redcarpet::Render::HTML
   def block_code(code, language)
-    Albino.safe_colorize(code, language)
+    Pygments.highlight(code, :lexer => language)
   end
 end
 
-markdown = Redcarpet::Markdown.new(HTMLwithAlbino, :fenced_code_blocks => true)
+markdown = Redcarpet::Markdown.new(HTMLwithPygments, :fenced_code_blocks => true)
 ~~~~~
 
 But new renderers can also be created from scratch (see `lib/render_man.rb` for
@@ -241,6 +244,7 @@ be copied verbatim:
 * triple_emphasis(text)
 * strikethrough(text)
 * superscript(text)
+* underline(text)
 
 ### Low level rendering
 

@@ -44,6 +44,9 @@ static void rb_redcarpet_md_flags(VALUE hash, unsigned int *enabled_extensions_p
 	if (rb_hash_lookup(hash, CSTR2SYM("strikethrough")) == Qtrue)
 		extensions |= MKDEXT_STRIKETHROUGH;
 
+	if (rb_hash_lookup(hash, CSTR2SYM("underline")) == Qtrue)
+		extensions |= MKDEXT_UNDERLINE;
+
 	if (rb_hash_lookup(hash, CSTR2SYM("lax_spacing")) == Qtrue)
 		extensions |= MKDEXT_LAX_SPACING;
 
@@ -136,6 +139,7 @@ static VALUE rb_redcarpet_md_render(VALUE self, VALUE text)
 	return text;
 }
 
+__attribute__((visibility("default")))
 void Init_redcarpet()
 {
     rb_mRedcarpet = rb_define_module("Redcarpet");
