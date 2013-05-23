@@ -6,7 +6,7 @@ __NOTE__: This fork will contain two custom markdown render classes that will in
 Redcarpet 2 is written with sugar, spice and everything nice
 ============================================================
 
-[![Build Status](https://travis-ci.org/vmg/redcarpet.png)](https://travis-ci.org/vmg/redcarpet)
+[![Build Status](https://travis-ci.org/vmg/redcarpet.png?branch=master)](https://travis-ci.org/vmg/redcarpet)
 
 Redcarpet is Ruby library for Markdown processing that smells like
 butterflies and popcorn.
@@ -79,6 +79,12 @@ be added at the end of the opening fence for the code block
 characters. Autolinks for the http, https and ftp protocols will be
 automatically detected. Email addresses are also handled, and http
 links without protocol, but starting with `www`.
+
+* `:disable_indented_code_blocks`: do not parse usual markdown
+code blocks. Markdown converts text with four spaces at
+the front of each line to code blocks. This options
+prevents it from doing so. Recommended to use
+with `fenced_code_blocks: true`.
 
 * `:strikethrough`: parse strikethrough, PHP-Markdown style
 Two `~` characters mark the start of a strikethrough,

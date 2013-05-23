@@ -38,6 +38,9 @@ static void rb_redcarpet_md_flags(VALUE hash, unsigned int *enabled_extensions_p
 	if (rb_hash_lookup(hash, CSTR2SYM("fenced_code_blocks")) == Qtrue)
 		extensions |= MKDEXT_FENCED_CODE;
 
+	if (rb_hash_lookup(hash, CSTR2SYM("disable_indented_code_blocks")) == Qtrue)
+		extensions |= MKDEXT_DISABLE_INDENTED_CODE;
+
 	if (rb_hash_lookup(hash, CSTR2SYM("autolink")) == Qtrue)
 		extensions |= MKDEXT_AUTOLINK;
 
@@ -124,12 +127,12 @@ static VALUE rb_redcarpet_md_render(VALUE self, VALUE text)
 	/* render the magic */
 	sd_markdown_render(
 		output_buf,
-		RSTRING_PTR(text),
+		(const uint8_t*)RSTRING_PTR(text),
 		RSTRING_LEN(text),
 		markdown);
 
 	/* build the Ruby string */
-	text = redcarpet_str_new(output_buf->data, output_buf->size, rb_enc_get(text));
+	text = redcarpet_str_new((const char*)output_buf->data, output_buf->size, rb_enc_get(text));
 
 	bufrelease(output_buf);
 
