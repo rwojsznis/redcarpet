@@ -43,7 +43,6 @@ Gem::Specification.new do |s|
     lib/redcarpet/custom_markdown.rb
     lib/redcarpet/sugar_markdown.rb
     redcarpet.gemspec
-    sundown
     test/test_helper.rb
     test/custom_render_test.rb
     test/html_render_test.rb
