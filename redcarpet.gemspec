@@ -59,11 +59,11 @@ Gem::Specification.new do |s|
   s.extensions = ["ext/redcarpet/extconf.rb"]
   s.executables = ["redcarpet"]
   s.require_paths = ["lib"]
-  s.add_dependency "i18n"
-  s.add_development_dependency "nokogiri"
-  s.add_development_dependency "rake-compiler"
-  s.add_development_dependency "test-unit"
-  s.add_development_dependency "bluecloth"
-  s.add_development_dependency "kramdown"
+  s.add_development_dependency "nokogiri", "~> 1.5.9"
+  s.add_development_dependency "rake-compiler", "~> 0.8.3"
+  s.add_development_dependency "test-unit", "~> 2.5.4"
+  s.add_development_dependency "bluecloth", "~> 2.2.0"
+  s.add_development_dependency "kramdown", "~> 1.0.2"
   s.add_development_dependency "mocha"
+  s.add_dependency "i18n"
 end

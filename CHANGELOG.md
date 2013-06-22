@@ -1,5 +1,17 @@
 # Changelog
 
+* Make emphasis wrapped inside parenthesis parsed *Robin Dupret*
+
+* Remove the Sundown submodule *Robin Dupret*
+
+* Fix FTP uris identified as emails *Robin Dupret*
+
+* Add optional highlight support *Sam Soffes*
+
+  This is `==highlighted==`.
+
+* Ensure nested parenthesis are handled into links *Robin Dupret*
+
 * Ensure nested code spans put in emphasis work correctly *Robin Dupret*
 
 ## Version 2.3.0

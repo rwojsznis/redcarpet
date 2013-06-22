@@ -65,6 +65,7 @@ typedef size_t
 
 static size_t char_emphasis(struct buf *ob, struct sd_markdown *rndr, uint8_t *data, size_t offset, size_t size);
 static size_t char_underline(struct buf *ob, struct sd_markdown *rndr, uint8_t *data, size_t offset, size_t size);
+static size_t char_highlight(struct buf *ob, struct sd_markdown *rndr, uint8_t *data, size_t offset, size_t size);
 static size_t char_linebreak(struct buf *ob, struct sd_markdown *rndr, uint8_t *data, size_t offset, size_t size);
 static size_t char_codespan(struct buf *ob, struct sd_markdown *rndr, uint8_t *data, size_t offset, size_t size);
 static size_t char_escape(struct buf *ob, struct sd_markdown *rndr, uint8_t *data, size_t offset, size_t size);
@@ -539,6 +540,8 @@ parse_emph2(struct buf *ob, struct sd_markdown *rndr, uint8_t *data, size_t size
 
 			if (c == '~')
 				r = rndr->cb.strikethrough(ob, work, rndr->opaque);
+			else if (c == '=')
+				r = rndr->cb.highlight(ob, work, rndr->opaque);
 			else
 				r = rndr->cb.double_emphasis(ob, work, rndr->opaque);
 
@@ -600,14 +603,14 @@ char_emphasis(struct buf *ob, struct sd_markdown *rndr, uint8_t *data, size_t of
 	size_t ret;
 
 	if (rndr->ext_flags & MKDEXT_NO_INTRA_EMPHASIS) {
-		if (offset > 0 && !_isspace(data[-1]) && data[-1] != '>')
+		if (offset > 0 && !_isspace(data[-1]) && data[-1] != '>' && data[-1] != '(')
 			return 0;
 	}
 
 	if (size > 2 && data[1] != c) {
 		/* whitespace cannot follow an opening emphasis;
 		 * strikethrough only takes two characters '~~' */
-		if (c == '~' || _isspace(data[1]) || (ret = parse_emph1(ob, rndr, data + 1, size - 1, c)) == 0)
+		if (c == '~' || c == '=' || _isspace(data[1]) || (ret = parse_emph1(ob, rndr, data + 1, size - 1, c)) == 0)
 			return 0;
 
 		return ret + 1;
@@ -621,7 +624,7 @@ char_emphasis(struct buf *ob, struct sd_markdown *rndr, uint8_t *data, size_t of
 	}
 
 	if (size > 4 && data[1] == c && data[2] == c && data[3] != c) {
-		if (c == '~' || _isspace(data[3]) || (ret = parse_emph3(ob, rndr, data + 3, size - 3, c)) == 0)
+		if (c == '~' || c == '=' || _isspace(data[3]) || (ret = parse_emph3(ob, rndr, data + 3, size - 3, c)) == 0)
 			return 0;
 
 		return ret + 3;
@@ -898,10 +901,18 @@ char_link(struct buf *ob, struct sd_markdown *rndr, uint8_t *data, size_t offset
 		link_b = i;
 
 		/* looking for link end: ' " ) */
+		/* Count the number of open parenthesis */
+		size_t nb_p = 0;
+
 		while (i < size) {
 			if (data[i] == '\\') i += 2;
-			else if (data[i] == ')') break;
-			else if (i >= 1 && _isspace(data[i-1]) && (data[i] == '\'' || data[i] == '"')) break;
+			else if (data[i] == '(' && i != 0) {
+				nb_p++; i++;
+			}
+			else if (data[i] == ')') {
+				if (nb_p == 0) break;
+				else nb_p--; i++;
+			} else if (i >= 1 && _isspace(data[i-1]) && (data[i] == '\'' || data[i] == '"')) break;
 			else i++;
 		}
 
@@ -2423,6 +2434,8 @@ sd_markdown_new(
 		md->active_char['_'] = MD_CHAR_EMPHASIS;
 		if (extensions & MKDEXT_STRIKETHROUGH)
 			md->active_char['~'] = MD_CHAR_EMPHASIS;
+		if (extensions & MKDEXT_HIGHLIGHT)
+			md->active_char['='] = MD_CHAR_EMPHASIS;
 	}
 
 	if (md->cb.codespan)
@@ -2555,5 +2568,3 @@ sd_version(int *ver_major, int *ver_minor, int *ver_revision)
 	*ver_minor = SUNDOWN_VER_MINOR;
 	*ver_revision = SUNDOWN_VER_REVISION;
 }
-
-/* vim: set filetype=c: */

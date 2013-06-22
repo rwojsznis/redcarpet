@@ -102,6 +102,9 @@ would not be a valid header.
 * `:underline`: parse underscored emphasis as underlines.
 `This is _underlined_ but this is still *italic*`.
 
+* `:highlight`: parse highlights.
+`This is ==highlighted==`. It looks like this: `<mark>highlighted</mark>`
+
 Example:
 
 ~~~~~ ruby
@@ -195,7 +198,7 @@ end
 markdown = Redcarpet::Markdown.new(HTMLwithPygments, :fenced_code_blocks => true)
 ~~~~~
 
-But new renderers can also be created from scratch (see `lib/render_man.rb` for
+But new renderers can also be created from scratch (see `lib/redcarpet/render_man.rb` for
 an example implementation of a Manpage renderer)
 
 ~~~~~~ ruby
@@ -252,6 +255,7 @@ be copied verbatim:
 * strikethrough(text)
 * superscript(text)
 * underline(text)
+* highlight(text)
 
 ### Low level rendering
 
