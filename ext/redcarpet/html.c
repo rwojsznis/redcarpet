@@ -108,8 +108,6 @@ rndr_autolink(struct buf *ob, const struct buf *link, enum mkd_autolink type, vo
 		escape_html(ob, link->data + 7, link->size - 7);
 	} else if (bufprefix(link, "https://") == 0) {
 		escape_html(ob, link->data + 8, link->size - 8);
-	} else if (bufprefix(link, "ftp://") == 0) {
-		escape_html(ob, link->data + 6, link->size - 6);
   } else {
 		escape_html(ob, link->data, link->size);
 	}
