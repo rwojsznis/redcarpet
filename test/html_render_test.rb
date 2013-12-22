@@ -193,7 +193,7 @@ HTML
 
     assert output.include? '<a href="ftp://auto/short/domains">ftp://auto/short/domains</a>'
     assert output.include? 'mailto:auto@l.n'
-    assert output.include? '<a href="http://a/u/t/o/s/h/o/r/t">http://a/u/t/o/s/h/o/r/t</a>'
+    assert output.include? '<a href="http://a/u/t/o/s/h/o/r/t">a/u/t/o/s/h/o/r/t</a>'
   end
 
   def test_toc_heading_id

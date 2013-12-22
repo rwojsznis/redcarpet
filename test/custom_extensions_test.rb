@@ -98,7 +98,7 @@ Just below
 
   def test_generating_toc_tags
    markdown = sugar_markdown("### Entry one\n### Entry two")
-   html_equal "<h3 id=\"toc_0\">Entry one</h3>\n\n<h3 id=\"toc_1\">Entry two</h3>\n", markdown
+   html_equal "<h3 id=\"entry-one\">Entry one</h3>\n\n<h3 id=\"entry-two\">Entry two</h3>\n", markdown
   end
 
   def test_centered_text
