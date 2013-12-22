@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2008, Natacha Porté
  * Copyright (c) 2011, Vicent Martí
  *
@@ -55,7 +55,7 @@ int bufgrow(struct buf *, size_t);
 struct buf *bufnew(size_t) __attribute__ ((malloc));
 
 /* bufnullterm: NUL-termination of the string array (making a C-string) */
-const char *bufcstr(struct buf *);
+const char *bufcstr(const struct buf *);
 
 /* bufprefix: compare the beginning of a buffer with a string */
 int bufprefix(const struct buf *buf, const char *prefix);
@@ -71,12 +71,6 @@ void bufputc(struct buf *, int);
 
 /* bufrelease: decrease the reference count and free the buffer if needed */
 void bufrelease(struct buf *);
-
-/* bufreset: frees internal data of the buffer */
-void bufreset(struct buf *);
-
-/* bufslurp: removes a given number of bytes from the head of the array */
-void bufslurp(struct buf *, size_t);
 
 /* bufprintf: formatted printing to a buffer */
 void bufprintf(struct buf *, const char *, ...) __attribute__ ((format (printf, 2, 3)));

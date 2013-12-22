@@ -3,7 +3,7 @@
 
 __NOTE__: This fork will contain two custom markdown render classes that will include emoji support, automatic youtube frame generation and some other custom tags that you may, or may not find useful (logic extracted from [quake.net.pl](http://quake.net.pl) into the public)
 
-Redcarpet 2 is written with sugar, spice and everything nice
+Redcarpet is written with sugar, spice and everything nice
 ============================================================
 
 [![Build Status](https://travis-ci.org/vmg/redcarpet.png?branch=master)](https://travis-ci.org/vmg/redcarpet)
@@ -11,33 +11,29 @@ Redcarpet 2 is written with sugar, spice and everything nice
 Redcarpet is Ruby library for Markdown processing that smells like
 butterflies and popcorn.
 
-Redcarpet used to be a drop-in replacement for Redcloth. This is no longer the
-case since version 2 -- it now has its own API, but retains the old name. Yes,
-that does mean that Redcarpet 2 is not backwards-compatible with the 1.X
-versions.
-
-Redcarpet is powered by the [Sundown](https://www.github.com/vmg/sundown)
-library. You might want to find out more about Sundown to see what makes this
-Ruby library so awesome.
-
 This library is written by people
 ---------------------------------
 
-Redcarpet 2 has been rewritten from scratch by Vicent Martí (@vmg). Why
-are you not following me on Twitter?
+Redcarpet was written by [Vicent Martí](https://github.com/vmg). It is maintained by
+[Robin Dupret](https://github.com/robin850) and [Matt Rogers](https://github.com/mattr-).
 
-Redcarpet would not be possible without the Sundown library and its authors
-(Natacha Porté, Vicent Martí, and its many awesome contributors).
+Redcarpet would not be possible without the [Sundown](https://www.github.com/vmg/sundown)
+library and its authors (Natacha Porté, Vicent Martí, and its many awesome contributors).
 
 You can totally install it as a Gem
 -----------------------------------
 
 Redcarpet is readily available as a Ruby gem. It will build some native
 extensions, but the parser is standalone and requires no installed libraries.
+Starting with Redcarpet 3.0, the minimum required Ruby version is 1.9.2 (or Rubinius in 1.9 mode).
 
     $ [sudo] gem install redcarpet
 
-The Redcarpet source (including Sundown as a submodule) is available at GitHub:
+If you need to use it with Ruby 1.8.7, you will need to stick with 2.3.0:
+
+    $ [sudo] gem install redcarpet -v 2.3.0
+
+The Redcarpet source is available at GitHub:
 
     $ git clone git://github.com/vmg/redcarpet.git
 
@@ -49,12 +45,12 @@ instance of the class is attached to a `Renderer` object; the Markdown class
 performs parsing of a document and uses the attached renderer to generate
 output.
 
-The `Markdown` object is encouraged to be instantiated once with the required
-settings, and reused between parses.
+The `Redcarpet::Markdown` object is encouraged to be instantiated once with the
+required settings, and reused between parses.
 
 ~~~~~ ruby
 # Initializes a Markdown parser
-Markdown.new(renderer, extensions = {})
+Redcarpet::Markdown.new(renderer, extensions = {})
 ~~~~~
 
 
@@ -71,7 +67,7 @@ Strings such as `foo_bar_baz` will not generate `<em>` tags.
 * `:tables`: parse tables, PHP-Markdown style.
 
 * `:fenced_code_blocks`: parse fenced code blocks, PHP-Markdown
-style. Blocks delimited with 3 or more `~` or backtickswill be considered
+style. Blocks delimited with 3 or more `~` or backticks will be considered
 as code, without the need to be indented. An optional language name may
 be added at the end of the opening fence for the code block.
 
@@ -97,13 +93,23 @@ empty line as in the Markdown standard.
 at the beginning of a header and its name, e.g. `#this is my header`
 would not be a valid header.
 
-* `:superscript`: parse superscripts after the `^` character; contiguous superscripts are nested together, and complex values can be enclosed in parenthesis, e.g. `this is the 2^(nd) time`
+* `:superscript`: parse superscripts after the `^` character; contiguous superscripts
+are nested together, and complex values can be enclosed in parenthesis, e.g.
+`this is the 2^(nd) time`.
 
 * `:underline`: parse underscored emphasis as underlines.
 `This is _underlined_ but this is still *italic*`.
 
 * `:highlight`: parse highlights.
 `This is ==highlighted==`. It looks like this: `<mark>highlighted</mark>`
+
+* `:quote`: parse quotes.
+`This is a "quote"`. It looks like this: `<q>quote</q>`
+
+* `:footnotes`: parse footnotes, PHP-Markdown style. A footnote works very much
+like a reference-style link: it consists of a  marker next to the text (e.g.
+`This is a sentence.[^1]`) and a footnote definition on its own line anywhere
+within the document (e.g. `[^1]: This is a footnote.`).
 
 Example:
 
@@ -132,11 +138,11 @@ performance — several degrees of magnitude faster than other Ruby Markdown
 solutions.
 
 All the rendering flags that previously applied only to HTML output have
-now been moved to the `Render::HTML` class, and may be enabled when
+now been moved to the `Redcarpet::Render::HTML` class, and may be enabled when
 instantiating the renderer:
 
 ~~~~~ ruby
-Render::HTML.new(render_options = {})
+Redcarpet::Render::HTML.new(render_options = {})
 ~~~~~
 
 Initializes an HTML renderer. The following flags are available:
@@ -175,6 +181,10 @@ renderer = Redcarpet::Render::HTML.new(:no_links => true, :hard_wrap => true)
 The `HTML` renderer has an alternate version, `Redcarpet::Render::HTML_TOC`,
 which will output a table of contents in HTML based on the headers of the
 Markdown document.
+
+When instantiating this render object, you can optionally pass a `nesting_level`
+option which takes an integer and allows you to make it render only headers
+until a specific level.
 
 Furthermore, the abstract base class `Redcarpet::Render::Base` can be used
 to write a custom renderer purely in Ruby, or extending an existing renderer.
@@ -228,6 +238,8 @@ end
 * block_code(code, language)
 * block_quote(quote)
 * block_html(raw_html)
+* footnotes(content)
+* footnote_def(content, number)
 * header(text, header_level)
 * hrule()
 * list(contents, list_type)
@@ -256,6 +268,8 @@ be copied verbatim:
 * superscript(text)
 * underline(text)
 * highlight(text)
+* quote(text)
+* footnote_ref(number)
 
 ### Low level rendering
 
@@ -298,7 +312,7 @@ The SmartyPants parser can be found in `Redcarpet::Render::SmartyPants`. It has
 been implemented as a module, so it can be used standalone or as a mixin.
 
 When mixed with a Renderer class, it will override the `postprocess` method
-to perform SmartyPants replacements once the rendering is complete
+to perform SmartyPants replacements once the rendering is complete.
 
 ~~~~ ruby
 # Mixin
@@ -317,13 +331,18 @@ inside the content of HTML tags and inside specific HTML blocks such as
 What? You really want to mix Markdown renderers?
 ------------------------------------------------
 
-What a terrible idea! Markdown is already ill-specified enough; if you create
-software that is renderer-independent, the results will be completely unreliable!
+Redcarpet used to be a drop-in replacement for Redcloth. This is no longer the
+case since version 2 -- it now has its own API, but retains the old name. Yes,
+that does mean that Redcarpet is not backwards-compatible with the 1.X
+versions.
 
 Each renderer has its own API and its own set of extensions: you should choose one
 (it doesn't have to be Redcarpet, though that would be great!), write your
 software accordingly, and force your users to install it. That's the
 only way to have reliable and predictable Markdown output on your program.
+
+Markdown is already ill-specified enough; if you create software that is
+renderer-independent, the results will be completely unreliable!
 
 Still, if major forces (let's say, tornadoes or other natural disasters) force you
 to keep a Markdown-compatibility layer, Redcarpet also supports this:
@@ -353,7 +372,7 @@ Tests run a lot faster without `bundle exec` :)
 Boring legal stuff
 ------------------
 
-Copyright (c) 2011, Vicent Martí
+Copyright (c) 2011-2013, Vicent Martí
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above

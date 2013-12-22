@@ -10,7 +10,7 @@ require 'redcarpet/chat_markdown'
 require 'i18n'
 
 module Redcarpet
-  VERSION = '2.3.0'
+  VERSION = '3.0.0'
 
   class Markdown
     attr_reader :renderer

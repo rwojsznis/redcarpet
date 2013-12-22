@@ -67,6 +67,27 @@ class MarkdownTest < Test::Unit::TestCase
       "<ul>\n<li>Blah</li>\n</ul>\n", markdown
   end
 
+  # https://github.com/vmg/redcarpet/issues/111
+  def test_p_with_less_than_4space_indent_should_not_be_part_of_last_list_item
+    text = <<MARKDOWN
+  * a
+  * b
+  * c
+
+  This paragraph is not part of the list.
+MARKDOWN
+    expected = <<HTML
+<ul>
+<li>a</li>
+<li>b</li>
+<li>c</li>
+</ul>
+
+<p>This paragraph is not part of the list.</p>
+HTML
+    html_equal expected, @markdown.render(text)
+  end
+
   # http://github.com/rtomayko/rdiscount/issues/#issue/13
   def test_headings_with_trailing_space
     text = "The Ant-Sugar Tales \n"         +
@@ -86,26 +107,6 @@ class MarkdownTest < Test::Unit::TestCase
   def test_that_autolink_flag_works
     rd = render_with({:autolink => true}, "http://github.com/rtomayko/rdiscount")
     html_equal "<p><a href=\"http://github.com/rtomayko/rdiscount\">github.com/rtomayko/rdiscount</a></p>\n", rd
-  end
-
-  if "".respond_to?(:encoding)
-    def test_should_return_string_in_same_encoding_as_input
-      input = "Yogācāra"
-      output = @markdown.render(input)
-      assert_equal input.encoding.name, output.encoding.name
-    end
-
-    def test_should_return_string_in_same_encoding_not_in_utf8
-      input = "testing".encode('US-ASCII')
-      output = @markdown.render(input)
-      assert_equal input.encoding.name, output.encoding.name
-    end
-
-    def test_should_accept_non_utf8_or_ascii
-      input = "testing \xAB\xCD".force_encoding('ASCII-8BIT')
-      output = @markdown.render(input)
-      assert_equal 'ASCII-8BIT', output.encoding.name
-    end
   end
 
   def test_that_tags_can_have_dashes_and_underscores
@@ -199,6 +200,15 @@ EOS
     assert output.include? '<mark>highlighted</mark>'
   end
 
+  def test_quote_flag_works
+    text = 'this is "quote"'
+
+    refute render_with({}, text).include? '<q>quote</q>'
+
+    output = render_with({:quote => true}, text)
+    assert output.include? '<q>quote</q>'
+  end
+
   def test_that_fenced_flag_works
     text = <<fenced
 This is a simple test
@@ -221,12 +231,6 @@ fenced
 
     out = Redcarpet::Markdown.new(Redcarpet::Render::HTML, :fenced_code_blocks => true).render(text)
     assert !out.include?("<pre><code>")
-  end
-
-  def test_that_prettify_works
-    text = "foo\nbar\n```\nsome\ncode\n```\nbaz"
-    out = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(:prettify => true), :fenced_code_blocks => true).render(text)
-    assert !out.include?("<pre><code class=\"prettyprint\">")
   end
 
   def test_that_indented_flag_works
@@ -269,5 +273,13 @@ text
     markdown = "This is (**bold**) and this_is_not_italic!"
     html = "<p>This is (<strong>bold</strong>) and this_is_not_italic!</p>\n"
     assert_equal html, render_with({:no_intra_emphasis => true}, markdown)
+  end
+
+  def test_ordered_lists_with_lax_spacing
+    markdown = "Foo:\n1. Foo\n2. Bar"
+    output = render_with({lax_spacing: true}, markdown)
+
+    assert_match /<ol>/, output
+    assert_match /<li>Foo<\/li>/, output
   end
 end

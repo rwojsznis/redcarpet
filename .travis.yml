@@ -1,8 +1,15 @@
-language: ruby
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get -qq install tidy
+
+install: bundle install --without=benchmark
 
 rvm:
+  - 1.9.2
   - 1.9.3
   - 2.0.0
+  - rbx-2
+  - ruby-head
 
 notifications:
   email: false
