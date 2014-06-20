@@ -35,6 +35,7 @@ The Redcarpet source is available at GitHub:
 
     $ git clone git://github.com/vmg/redcarpet.git
 
+
 And it's like *really* simple to use
 ------------------------------------
 
@@ -48,13 +49,22 @@ required settings, and reused between parses.
 
 ~~~~~ ruby
 # Initializes a Markdown parser
-Redcarpet::Markdown.new(renderer, extensions = {})
+markdown = Redcarpet::Markdown.new(renderer, extensions = {})
 ~~~~~
-
 
 Here, the `renderer` variable refers to a renderer object, inheriting
 from `Redcarpet::Render::Base`. If the given object has not been
 instantiated, the library will do it with default arguments.
+
+Rendering with the `Markdown` object is done through `Markdown#render`.
+Unlike in the RedCloth API, the text to render is passed as an argument
+and not stored inside the `Markdown` instance, to encourage reusability.
+Example:
+
+~~~~~ ruby
+markdown.render("This is *bongos*, indeed.")
+# => "<p>This is <em>bongos</em>, indeed.</p>"
+~~~~~
 
 You can also specify a hash containing the Markdown extensions which the
 parser will identify. The following extensions are accepted:
@@ -80,7 +90,7 @@ the front of each line to code blocks. This options
 prevents it from doing so. Recommended to use
 with `fenced_code_blocks: true`.
 
-* `:strikethrough`: parse strikethrough, PHP-Markdown style
+* `:strikethrough`: parse strikethrough, PHP-Markdown style.
 Two `~` characters mark the start of a strikethrough,
 e.g. `this is ~~good~~ bad`.
 
@@ -111,20 +121,9 @@ within the document (e.g. `[^1]: This is a footnote.`).
 
 Example:
 
-~~~~~ ruby
-markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, :autolink => true, :space_after_headers => true)
-~~~~~
-
-Rendering with the `Markdown` object is done through `Markdown#render`.
-Unlike in the RedCloth API, the text to render is passed as an argument
-and not stored inside the `Markdown` instance, to encourage reusability.
-Example:
-
-~~~~~ ruby
-markdown.render("This is *bongos*, indeed.")
-# => "<p>This is <em>bongos</em>, indeed</p>"
-~~~~~
-
+~~~ruby
+markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+ ~~~~~
 
 Darling, I packed you a couple renderers for lunch
 --------------------------------------------------
@@ -153,6 +152,10 @@ Initializes an HTML renderer. The following flags are available:
 
 * `:no_styles`: do not generate any `<style>` tags.
 
+* `:escape_html`: escape any HTML tags. This option has precedence over
+`:no_styles`, `:no_links`, `:no_images` and `:filter_html` which means
+that any existing tag will be escaped instead of being removed.
+
 * `:safe_links_only`: only generate links for protocols which are considered
 safe.
 
@@ -172,7 +175,7 @@ Markdown document had newlines (by default, Markdown ignores these newlines).
 Example:
 
 ~~~~~ ruby
-renderer = Redcarpet::Render::HTML.new(:no_links => true, :hard_wrap => true)
+renderer = Redcarpet::Render::HTML.new(no_links: true, hard_wrap: true)
 ~~~~~
 
 
@@ -199,11 +202,11 @@ built-in renderers, `HTML` and `XHTML` may be extended as such:
 # create a custom renderer that allows highlighting of code blocks
 class HTMLwithPygments < Redcarpet::Render::HTML
   def block_code(code, language)
-    Pygments.highlight(code, :lexer => language)
+    Pygments.highlight(code, lexer: language)
   end
 end
 
-markdown = Redcarpet::Markdown.new(HTMLwithPygments, :fenced_code_blocks => true)
+markdown = Redcarpet::Markdown.new(HTMLwithPygments, fenced_code_blocks: true)
 ~~~~~
 
 But new renderers can also be created from scratch (see `lib/redcarpet/render_man.rb` for
@@ -268,6 +271,11 @@ be copied verbatim:
 * highlight(text)
 * quote(text)
 * footnote_ref(number)
+
+**Note**: When overriding a renderer's method, be sure to return a HTML
+element with a level that match the level of that method (e.g. return a block
+element when overriding a block-level callback). Otherwise, the output may
+be unexpected.
 
 ### Low level rendering
 
@@ -362,10 +370,6 @@ that's a maintenance nightmare and won't work.
 
 On a related topic: if your Markdown gem has a `lib/markdown.rb` file that
 monkeypatches the Markdown class, you're a terrible human being. Just saying.
-
-Testing
--------
-Tests run a lot faster without `bundle exec` :)
 
 Boring legal stuff
 ------------------

@@ -9,7 +9,7 @@ I18n.backend.store_translations(:pl, :countries => { :pl => "Polska", :se => "Sz
                                      :editor    => { :pictures => { :not_found => "Brak obrazka" }})
 I18n.locale = :pl
 
-class ChatMarkdownRenderTest < Test::Unit::TestCase
+class ChatMarkdownRenderTest < Redcarpet::TestCase
 
   def chat_markdown(text)
     Redcarpet::Markdown.new(Redcarpet::Render::ChatMarkdown).render(text)
@@ -53,7 +53,7 @@ class ChatMarkdownRenderTest < Test::Unit::TestCase
 
 end
 
-class SugarMarkdownRenderTest < Test::Unit::TestCase
+class SugarMarkdownRenderTest < Redcarpet::TestCase
 
   def sugar_markdown(text)
     Redcarpet::Markdown.new(Redcarpet::Render::SugarMarkdown, tables: true, autolink: true, strikethrough: true).render(text)
@@ -169,7 +169,7 @@ You&#39;ll be <img src='\/img\/emoji\/cool.png' class='emoji' \/><br\/>
 
 end
 
-class SimpleMarkdownRenderTest < Test::Unit::TestCase
+class SimpleMarkdownRenderTest < Redcarpet::TestCase
 
   def simple_markdown(text)
     Redcarpet::Markdown.new(Redcarpet::Render::SimpleMarkdown, autolink: true, strikethrough: true).render(text)
