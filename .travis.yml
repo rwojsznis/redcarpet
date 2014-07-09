@@ -5,12 +5,10 @@ before_install:
 install: travis_retry bundle install --without=benchmark
 
 rvm:
-  - 1.9.2
   - 1.9.3
   - 2.0.0
-  - 2.1
-  - rbx-2
-  - ruby-head
+  - 2.1.2
+  - rbx-head
 
 notifications:
   email: false
