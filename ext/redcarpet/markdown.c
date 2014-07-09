@@ -1624,7 +1624,7 @@ static size_t
 parse_paragraph(struct buf *ob, struct sd_markdown *rndr, uint8_t *data, size_t size)
 {
 	size_t i = 0, end = 0;
-	int level = 0;
+	int level = 0, last_is_empty = 1;
 	struct buf work = { data, 0, 0, 0 };
 
 	while (i < size) {
@@ -1633,8 +1633,10 @@ parse_paragraph(struct buf *ob, struct sd_markdown *rndr, uint8_t *data, size_t 
 		if (is_empty(data + i, size - i))
 			break;
 
-		if ((level = is_headerline(data + i, size - i)) != 0)
+		if (!last_is_empty && (level = is_headerline(data + i, size - i)) != 0)
 			break;
+
+		last_is_empty = 0;
 
 		if (is_atxheader(rndr, data + i, size - i) ||
 			is_hrule(data + i, size - i) ||
