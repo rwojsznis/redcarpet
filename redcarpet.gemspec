@@ -65,6 +65,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "nokogiri", "~> 1.6.0"
   s.add_development_dependency "rake-compiler", "~> 0.8.3"
   s.add_development_dependency "test-unit", "~> 2.5.4"
-  s.add_development_dependency "mocha"
+  s.add_development_dependency "mocha", "~> 0.14.0"
   s.add_dependency "i18n"
 end

@@ -1,5 +1,5 @@
 require 'test_helper'
-require 'mocha'
+require 'mocha/setup'
 
 unless defined? Picture
   class Picture; end
