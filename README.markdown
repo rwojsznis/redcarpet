@@ -6,7 +6,7 @@ Redcarpet is written with sugar, spice and everything nice
 [![Code Climate](https://codeclimate.com/github/emq/redcarpet.png)](https://codeclimate.com/github/emq/redcarpet)
 [![Build Status](https://travis-ci.org/emq/redcarpet.png?branch=master)](https://travis-ci.org/emq/redcarpet)
 
-Redcarpet is Ruby library for Markdown processing that smells like
+Redcarpet is a Ruby library for Markdown processing that smells like
 butterflies and popcorn.
 
 This library is written by people
@@ -338,7 +338,7 @@ inside the content of HTML tags and inside specific HTML blocks such as
 Boring legal stuff
 ------------------
 
-Copyright (c) 2011-2013, Vicent Martí
+Copyright (c) 2011-2014, Vicent Martí
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
