@@ -49,7 +49,7 @@ Just below
 
   def test_youtube_video_tags
     markdown = sugar_markdown("Check this out httpv://www.youtube.com/watch?v=MnUxJyg6MCg dude")
-    assert_match /<p>Check this out <iframe width='\d+' height='\d+' src='http:\/\/www.youtube.com\/embed\/MnUxJyg6MCg\?rel=0' frameborder='0' allowfullscreen><\/iframe> dude<\/p>/i, markdown
+    assert_match /<p>Check this out <iframe width='\d+' height='\d+' src='https:\/\/www.youtube.com\/embed\/MnUxJyg6MCg\?rel=0' frameborder='0' allowfullscreen><\/iframe> dude<\/p>/i, markdown
   end
 
   def test_generating_toc_tags
@@ -69,7 +69,7 @@ Just below
 
   def test_centered_youtube_videos
     markdown = sugar_markdown(":center:httpv://www.youtube.com/watch?v=MnUxJyg6MCg")
-    assert_match /<p class='center'><iframe width='\d+' height='\d+' src='http:\/\/www.youtube.com\/embed\/MnUxJyg6MCg\?rel=0' frameborder='0' allowfullscreen><\/iframe><\/p>/, markdown
+    assert_match /<p class='center'><iframe width='\d+' height='\d+' src='https:\/\/www.youtube.com\/embed\/MnUxJyg6MCg\?rel=0' frameborder='0' allowfullscreen><\/iframe><\/p>/, markdown
   end
 
   def test_centered_markdown
@@ -119,7 +119,7 @@ httpv://www.youtube.com/watch?v=MnUxJyg6MCg
 Please <img src='\/img\/flags\/se.gif' title='Szwecja' \/> have a <del>seat<\/del><br\/>
 <span class="spoiler">Don&#39;t be<\/span> alarmed<br\/>
 You&#39;ll be <img src='\/img\/emoji\/cool.png' class='emoji' \/><br\/>
-<a class='flip' data-id='.{7,8}' href='#'>This is secret<\/a><div class='flip' id='.{7,8}'><iframe width='\d+' height='\d+' src='http:\/\/www.youtube.com\/embed\/MnUxJyg6MCg\?rel=0' frameborder='0' allowfullscreen><\/iframe><br\/>
+<a class='flip' data-id='.{7,8}' href='#'>This is secret<\/a><div class='flip' id='.{7,8}'><iframe width='\d+' height='\d+' src='https:\/\/www.youtube.com\/embed\/MnUxJyg6MCg\?rel=0' frameborder='0' allowfullscreen><\/iframe><br\/>
 <\/div><\/p>/i, markdown
   end
 

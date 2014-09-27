@@ -60,7 +60,7 @@ module Redcarpet
       # And add support for various video sites
       def youtubify(text)
         text.gsub(/(httpv:\/\/[\w\d.\/?=&-]+)/) do |match|
-          video = $1.gsub('httpv', 'http').gsub('watch?v=', 'embed/').strip
+          video = $1.gsub('httpv', 'https').gsub('watch?v=', 'embed/').strip
           "<iframe width='480' height='360' src='#{video}?rel=0' frameborder='0' allowfullscreen></iframe>"
         end
       end
