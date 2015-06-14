@@ -7,9 +7,10 @@ require 'redcarpet/simple_base'
 require 'redcarpet/simple_markdown'
 require 'redcarpet/sugar_markdown'
 require 'i18n'
+require 'redcarpet/compat'
 
 module Redcarpet
-  VERSION = '3.1.1'
+  VERSION = '3.3.1'
 
   class Markdown
     attr_reader :renderer
@@ -60,7 +61,7 @@ module Redcarpet
           '>' => '&gt;',
           '"' => '&quot;',
           "'" => '&#x27;',
-          "/" => '&#x2F',
+          "/" => '&#x2F;',
         })
       end
     end

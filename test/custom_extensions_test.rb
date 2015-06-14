@@ -17,7 +17,7 @@ class SugarMarkdownRenderTest < Redcarpet::TestCase
 
   def test_flag_tag
     markdown = sugar_markdown("Titta :se: pa mig!")
-    html_equal "<p>Titta <img src='/img/flags/se.gif' title='Szwecja' /> pa mig!</p>\n", markdown
+    assert_equal "<p>Titta <img src='/img/flags/se.gif' title='Szwecja' /> pa mig!</p>\n", markdown
   end
 
   def test_flip_tag
@@ -39,12 +39,12 @@ Just below
 
   def test_emoji_tags
     markdown = sugar_markdown("Howdy! How :cool: are you today?")
-    html_equal "<p>Howdy! How <img src='/img/emoji/cool.png' class='emoji' /> are you today?</p>\n", markdown
+    assert_equal "<p>Howdy! How <img src='/img/emoji/cool.png' class='emoji' /> are you today?</p>\n", markdown
   end
 
   def test_unsupported_emoji_tags
     markdown = sugar_markdown("How simple :could: it be?")
-    html_equal "<p>How simple :could: it be?</p>\n", markdown
+    assert_equal "<p>How simple :could: it be?</p>\n", markdown
   end
 
   def test_youtube_video_tags
@@ -54,17 +54,17 @@ Just below
 
   def test_generating_toc_tags
    markdown = sugar_markdown("### Entry one\n### Entry two")
-   html_equal "<h3 id=\"entry-one\">Entry one</h3>\n\n<h3 id=\"entry-two\">Entry two</h3>\n", markdown
+   assert_equal "<h3 id=\"entry-one\">Entry one</h3>\n\n<h3 id=\"entry-two\">Entry two</h3>\n", markdown
   end
 
   def test_centered_text
     markdown = sugar_markdown(":center:Howdy!")
-    html_equal "<p class='center'>Howdy!</p>\n\n", markdown
+    assert_equal "<p class='center'>Howdy!</p>\n\n", markdown
   end
 
   def test_centered_images
     markdown = sugar_markdown(":center:![](www.image.com/img.jpg)")
-    html_equal "<p class='center'><img src=\"www.image.com/img.jpg\" alt=\"\"/></p>\n\n", markdown
+    assert_equal "<p class='center'><img src=\"www.image.com/img.jpg\" alt=\"\"/></p>\n\n", markdown
   end
 
   def test_centered_youtube_videos
@@ -74,12 +74,12 @@ Just below
 
   def test_centered_markdown
     markdown = sugar_markdown(":center: :pl: **Poland!**")
-    html_equal "<p class='center'> <img src='/img/flags/pl.gif' title='Polska' /> <strong>Poland!</strong></p>\n\n", markdown
+    assert_equal "<p class='center'> <img src='/img/flags/pl.gif' title='Polska' /> <strong>Poland!</strong></p>\n\n", markdown
   end
 
   def test_floated_images
     markdown = sugar_markdown(":left:![](www.image.com/img.jpg)")
-    html_equal "<p class='left'><img src=\"www.image.com\/img.jpg\" alt=\"\"/></p>\n\n", markdown
+    assert_equal "<p class='left'><img src=\"www.image.com\/img.jpg\" alt=\"\"/></p>\n\n", markdown
   end
 
   def test_rendering_approved_pictures
@@ -88,20 +88,20 @@ Just below
                               attachment: stub(url: 'assets/image.png'))
     Picture.expects(:find_by_id).with(1).returns(picture)
     markdown = sugar_markdown("Image picture:1 test")
-    html_equal "<p>Image <img src='assets/image.png' alt='Image Title' /> test</p>\n", markdown
+    assert_equal "<p>Image <img src='assets/image.png' alt='Image Title' /> test</p>\n", markdown
   end
 
   def test_rendering_missing_pictures
     Picture.expects(:find_by_id).with(1).returns(nil)
     markdown = sugar_markdown("Image picture:1 test")
-    html_equal "<p>Image Brak obrazka test</p>\n", markdown
+    assert_equal "<p>Image Brak obrazka test</p>\n", markdown
   end
 
   def test_rendering_unapproved_pictures
     picture = stub('picture', approved: false)
     Picture.expects(:find_by_id).with(1).returns(picture)
     markdown = sugar_markdown("Image picture:1 test")
-    html_equal "<p>Image <img src='/img/pending.png' /> test</p>\n", markdown
+    assert_equal "<p>Image <img src='/img/pending.png' /> test</p>\n", markdown
   end
 
   def test_multiple_mixed_tags
@@ -133,17 +133,17 @@ class SimpleMarkdownRenderTest < Redcarpet::TestCase
 
   def test_rendering_code_blocks
     markdown = simple_markdown("This is some `awesome code`")
-    html_equal "<p>This is some <code>awesome code</code></p>\n", markdown
+    assert_equal "<p>This is some <code>awesome code</code></p>\n", markdown
   end
 
   def test_rendering_flag_tags
     markdown = simple_markdown("This is :pl: SPARTA!")
-    html_equal "<p>This is <img src='/img/flags/pl.gif' title='Polska' /> SPARTA!</p>\n", markdown
+    assert_equal "<p>This is <img src='/img/flags/pl.gif' title='Polska' /> SPARTA!</p>\n", markdown
   end
 
   def test_ignoring_unknown_flags
     markdown = simple_markdown("This is :qe: TEST!")
-    html_equal "<p>This is :qe: TEST!</p>\n", markdown
+    assert_equal "<p>This is :qe: TEST!</p>\n", markdown
   end
 
   def test_rendering_flip_tag
@@ -153,12 +153,12 @@ class SimpleMarkdownRenderTest < Redcarpet::TestCase
 
   def test_genering_proper_autolinks
     markdown = simple_markdown("Take a look at www.example.com")
-    html_equal "<p>Take a look at <a href=\"http://www.example.com\" rel=\"nofollow\" target=\"_blank\">www.example.com</a></p>\n", markdown
+    assert_equal "<p>Take a look at <a href=\"http://www.example.com\" rel=\"nofollow\" target=\"_blank\">www.example.com</a></p>\n", markdown
   end
 
   def test_genereting_proper_links
     markdown = simple_markdown("[link](http://example.net)")
-    html_equal "<p><a href=\"http://example.net\" rel=\"nofollow\" target=\"_blank\">link</a></p>\n", markdown
+    assert_equal "<p><a href=\"http://example.net\" rel=\"nofollow\" target=\"_blank\">link</a></p>\n", markdown
   end
 
 end

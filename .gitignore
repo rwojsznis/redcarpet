@@ -5,3 +5,7 @@
 /ext/redcarpet/Makefile
 /tmp
 Gemfile.lock
+.ruby-version
+.ruby-gemset
+coverage/
+pkg/
