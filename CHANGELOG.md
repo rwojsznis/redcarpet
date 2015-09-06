@@ -1,5 +1,24 @@
 # Changelog
 
+* Fix the `StripDown` render to handle the `:highlight` option.
+
+  *Itay Grudev*
+
+* The `StripDown` renderer handles tables if the `tables` extension is
+  enabled.
+
+  *amnesia7*
+
+* Fix Smarty Pants to avoid fraction conversions when there are several
+  numbers separated with slashes (e.g. for a date).
+
+  *Sam Saffron*
+
+## Version 3.3.2
+
+* Fix a potential security issue in the HTML renderer
+  (Thanks to Giancarlo Canales Barreto for the heads up)
+
 ## Version 3.3.1
 
 * Include the `Redcarpet::CLI`'s file in the gemspec to make it

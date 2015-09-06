@@ -10,7 +10,7 @@ require 'i18n'
 require 'redcarpet/compat'
 
 module Redcarpet
-  VERSION = '3.3.1'
+  VERSION = '3.3.2'
 
   class Markdown
     attr_reader :renderer
