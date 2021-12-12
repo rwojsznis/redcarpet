@@ -23,7 +23,7 @@ module Redcarpet
         text.gsub(/picture:(\d+)/) do |match|
           picture = Picture.find_by_id($1.to_i)
           if picture && picture.approved
-            "<img src='#{picture.attachment.url}' alt='#{picture.name}' />"
+            "<img src='#{picture.attachment.expiring_url}' alt='#{picture.name}' />"
           elsif picture
             "<img src='/img/pending.png' />"
           else
